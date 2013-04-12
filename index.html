@@ -67,7 +67,10 @@ jacobbijani.com
             
             aggregate: function(blog, posts){
                 if (typeof API.counts[blog] == 'undefined') {
-                    API.counts[blog] = {};
+                    API.counts[blog] = {
+                        meta: {},
+                        days: {},
+                    };
                 }
 
                 var last_day = 0;
@@ -89,16 +92,16 @@ jacobbijani.com
                     }
 
                     if (post.note_count) {
-                        if (typeof API.counts[blog][day] == 'undefined') {
-                            API.counts[blog][day] = {
+                        if (typeof API.counts[blog]['days'][day] == 'undefined') {
+                            API.counts[blog]['days'][day] = {
                                 date: date.toDateString(),
                                 notes: 0,
                                 posts: 0,
                             };
                         }
 
-                        API.counts[blog][day]['posts'] += 1;
-                        API.counts[blog][day]['notes'] += post.note_count;
+                        API.counts[blog]['days'][day]['posts'] += 1;
+                        API.counts[blog]['days'][day]['notes'] += post.note_count;
                     } else {
                         API.log('No note_count found for ' + blog + ' @ ' + post.id);
                     }
