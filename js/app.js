@@ -34,10 +34,28 @@ var API = {
     
     loading: function()
     {
-        $('#submit').disabled = true;
+        $('#submit').attr('disabled', 'disabled');
+        $('#results').hide();
+
         $('#log').text('');
         $('#log').parents('.row').show();
+
         $('#loading').show();
+    },
+
+    done: function()
+    {
+        API.update_results();
+
+        $('#submit').removeAttr('disabled');
+        $('#results').show();
+
+        $('#loading').hide();
+    },
+
+    update_results: function()
+    {
+        $('#results').text(JSON.stringify(API.counts, null, 4));
     },
 
     load: function(blog, offset)
@@ -64,6 +82,7 @@ var API = {
             API.counts[blog] = {
                 meta: {
                     offset: 0,
+                    done: false,
                 },
                 days: {},
             };
@@ -107,9 +126,10 @@ var API = {
             API.log('Haven\'t reached date cutoff yet on ' + blog);
             API.counts[blog]['meta']['offset'] += 50;
             API.load(blog + '.tumblr.com', API.counts[blog]['meta']['offset']);
+        } else {
+            API.update_results();
+            API.counts[blog]['meta']['done'] = true;
         }
-
-        $('#output').text(JSON.stringify(API.counts, null, 4));
     },
 
     callback: function(data)
