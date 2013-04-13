@@ -35,6 +35,7 @@ var API = {
 
     failure: function(reason)
     {
+        $('#submit').removeAttr('disabled');
         alert(API.log('API error' + (reason ? (': ' + reason) : '')));
     },
     
@@ -94,7 +95,7 @@ var API = {
 
         for (day in days) {
             var row = $('<tr/>');
-            
+
             row.append($('<td/>').text(
                 API.days_ago(days_ago++).toDateString()
             ));
@@ -182,10 +183,10 @@ var API = {
 
     callback: function(data)
     {
-        if (data && data.meta && data.meta.status == 200 && data.response.posts && data.response.posts.length) {
+        if (data && data.meta && data.meta.status == 200) {
             API.aggregate(data.response.blog.name, data.response.posts);
         } else {
-            API.failure();
+            API.failure(data.meta.msg);
         }
     }
 };
