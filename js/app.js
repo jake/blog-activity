@@ -158,4 +158,6 @@ $('#submit').on('click', function(){
         API.blogs.push(val);
         API.load(val);
     });
+
+    if (! API.blogs.length) API.try_done();
 });
