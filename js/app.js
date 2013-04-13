@@ -7,10 +7,12 @@ var API = {
     base:   "http://api.tumblr.com/v2",
     key:    'hFPxFhhjbogV6ZuGLyagswAcL1A0I3CSkFVdIYtZHV6E90Yojx',
 
+    blogs: [],
     counts: {},
     
     log: function(msg) {
         $('#log').append(msg + "\n");
+        return msg;
     },
 
     midnight: function(date){
@@ -26,7 +28,7 @@ var API = {
 
     failure: function(reason)
     {
-        alert('API error' + (reason ? (': ' + reason) : ''));
+        alert(API.log('API error' + (reason ? (': ' + reason) : '')));
     },
     
     loading: function()
@@ -40,9 +42,11 @@ var API = {
         $('#loading').show();
     },
 
-    done: function()
+    try_done: function()
     {
-        API.update_results();
+        if (Object.keys(API.counts).length < API.blogs.length) return;
+
+        API.display_results();
 
         $('#submit').removeAttr('disabled');
         $('#results').show();
@@ -50,8 +54,9 @@ var API = {
         $('#loading').hide();
     },
 
-    update_results: function()
+    display_results: function()
     {
+        API.log('Displaying results');
         $('#results').text(JSON.stringify(API.counts, null, 4));
     },
 
@@ -73,7 +78,6 @@ var API = {
             API.counts[blog] = {
                 meta: {
                     offset: 0,
-                    done: false,
                 },
                 days: {},
             };
@@ -118,8 +122,7 @@ var API = {
             API.counts[blog]['meta']['offset'] += 50;
             API.load(blog + '.tumblr.com', API.counts[blog]['meta']['offset']);
         } else {
-            API.update_results();
-            API.counts[blog]['meta']['done'] = true;
+            API.try_done();
         }
     },
 
@@ -152,6 +155,7 @@ $('#submit').on('click', function(){
             val = val + '.tumblr.com';
         }
 
+        API.blogs.push(val);
         API.load(val);
     });
 });
