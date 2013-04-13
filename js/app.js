@@ -3,9 +3,16 @@ Date.prototype.getDOY = function() {
     return Math.ceil((this - jan_first) / 86400000);
 }
 
+function number_with_commas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 var API = {
     base:   "http://api.tumblr.com/v2",
     key:    'hFPxFhhjbogV6ZuGLyagswAcL1A0I3CSkFVdIYtZHV6E90Yojx',
+
+    days: 10,
+    date_cutoff: 0,
 
     blogs: [],
     counts: {},
@@ -57,7 +64,54 @@ var API = {
     display_results: function()
     {
         API.log('Displaying results');
-        $('#results').text(JSON.stringify(API.counts, null, 4));
+
+        $('#results').html($('#results-template').html());
+
+        var days = {};
+
+        for (var i = 0; i < API.days; i++) {
+            days[API.midnight(API.days_ago(i))] = {};
+        }
+
+        $(Object.keys(API.counts)).each(function(i, blog){
+            $('#results-head').append(
+                $('<th/>').text(blog)
+            );
+
+            for (day in days) {
+                if (typeof API.counts[blog].days[day] == 'undefined') {
+                    days[day][blog] = {
+                        notes: 0,
+                        posts: 0,
+                    };
+                } else {
+                    days[day][blog] = API.counts[blog].days[day];
+                }
+            }
+        });
+
+        var days_ago = 0;
+
+        for (day in days) {
+            var row = $('<tr/>');
+            
+            row.append($('<td/>').text(
+                API.days_ago(days_ago++).toDateString()
+            ));
+
+            for (blog in days[day]) {
+                var html = '<span class="muted">&mdash;</span>';
+                var info = days[day][blog];
+
+                if (info.posts) {
+                    html = number_with_commas(info.notes) + ' <em class="muted">(' + info.posts + ' post' + (info.posts == 2 ? 's' : '') + ')</em>';
+                }
+
+                row.append($('<td/>').html(html));
+            }
+
+            $('#results-body').append(row);
+        }
     },
 
     load: function(blog, offset)
@@ -136,7 +190,7 @@ var API = {
     }
 };
 
-API.date_cutoff = API.days_ago(10) / 1;
+API.date_cutoff = API.days_ago(API.days) / 1;
 
 $('#submit').on('click', function(){
     API.loading();
