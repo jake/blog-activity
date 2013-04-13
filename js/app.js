@@ -129,6 +129,8 @@ var API = {
     },
     
     aggregate: function(blog, posts){
+        API.log('Processing posts for ' + blog);
+
         if (typeof API.counts[blog] == 'undefined') {
             API.counts[blog] = {
                 meta: {
