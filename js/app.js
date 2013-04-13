@@ -154,7 +154,7 @@ var API = {
             last_day = day;
 
             if (day <= API.date_cutoff) {
-                API.log('Reached day cutoff on ' + blog + ' @ ' + post.id);
+                API.log('Reached day cutoff on ' + blog + ' @ post ' + post.id);
                 return false;
             }
 
@@ -170,7 +170,7 @@ var API = {
                 API.counts[blog]['days'][day]['posts'] += 1;
                 API.counts[blog]['days'][day]['notes'] += post.note_count;
             } else {
-                API.log('No note_count found for ' + blog + ' @ ' + post.id);
+                API.log('No note_count found for ' + blog + ' @ post ' + post.id);
             }
         });
 
