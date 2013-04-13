@@ -142,6 +142,7 @@ $('#submit').on('click', function(){
     API.loading();
 
     // Reset data
+    API.blogs = [];
     API.counts = {};
 
     $($('#blogs').val().split("\n")).each(function(i, val){
