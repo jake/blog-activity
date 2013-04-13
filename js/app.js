@@ -6,9 +6,6 @@ Date.prototype.getDOY = function() {
 var API = {
     base:   "http://api.tumblr.com/v2",
     key:    'hFPxFhhjbogV6ZuGLyagswAcL1A0I3CSkFVdIYtZHV6E90Yojx',
-    retries: 10,
-    retry:  false,
-    retry_delay: 1500,
 
     counts: {},
     
@@ -27,9 +24,9 @@ var API = {
         return date;
     },
 
-    failure: function()
+    failure: function(reason)
     {
-        alert('API error');
+        alert('API error' + (reason ? (': ' + reason) : ''));
     },
     
     loading: function()
@@ -64,17 +61,11 @@ var API = {
             offset = 0;
         }
 
-        if (! API.retries) {
-            API.failure();
-            return false;
-        }
-        
         API.log('Querying ' + blog + ' at offset ' + offset);
 
-        $.getScript(API.base + '/blog/' + blog + '/posts?jsonp=API.callback&reblog_info=true&limit=50&offset=' + offset + '&api_key=' + API.key, function(script, textStatus){
-            API.retries--;
-            API.retry = false;
-        });
+        $.getScript(
+            API.base + '/blog/' + blog + '/posts?jsonp=API.callback&reblog_info=true&limit=50&offset=' + offset + '&api_key=' + API.key
+        );
     },
     
     aggregate: function(blog, posts){
@@ -138,8 +129,6 @@ var API = {
             API.aggregate(data.response.blog.name, data.response.posts);
         } else {
             API.failure();
-            // if (! API.retry) API.retry = window.setTimeout(API.load(data.blog.url), API.retry_delay);
-            // if (! API.retries) API.failure();
         }
     }
 };
