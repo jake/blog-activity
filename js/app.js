@@ -162,7 +162,7 @@ var API = {
             last_day = day;
 
             if (day <= API.date_cutoff) {
-                API.log('Reached day cutoff on ' + blog + ' @ post ' + post.id);
+                API.log('Reached day cutoff for ' + blog + ' @ post ' + post.id);
                 return false;
             }
 
@@ -183,7 +183,7 @@ var API = {
         });
 
         if (last_day > API.date_cutoff) {
-            API.log('Haven\'t reached date cutoff yet on ' + blog);
+            API.log('Haven\'t reached date cutoff yet for ' + blog);
             API.counts[blog]['meta']['offset'] += 50;
             API.load(blog + '.tumblr.com', API.counts[blog]['meta']['offset']);
         } else {
