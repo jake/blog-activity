@@ -105,7 +105,7 @@ var API = {
                 var info = days[day][blog];
 
                 if (info.posts) {
-                    html = number_with_commas(info.notes) + ' <em class="muted">(' + info.posts + ' post' + (info.posts == 2 ? 's' : '') + ')</em>';
+                    html = number_with_commas(info.notes) + ' <em class="muted">(' + info.posts + ' post' + (info.posts != 1 ? 's' : '') + ')</em>';
                 }
 
                 row.append($('<td/>').html(html));
