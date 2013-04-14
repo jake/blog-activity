@@ -11,23 +11,30 @@ var API = {
     base:   "http://api.tumblr.com/v2",
     key:    'hFPxFhhjbogV6ZuGLyagswAcL1A0I3CSkFVdIYtZHV6E90Yojx',
 
-    days: 10,
     date_cutoff: 0,
 
     blogs: [],
     counts: {},
     
-    log: function(msg) {
+    log: function(msg)
+    {
         $('#log').append(msg + "\n");
         return msg;
     },
 
-    midnight: function(date){
+    midnight: function(date)
+    {
         var timestamp = new Date(date.getFullYear(), date.getMonth(), date.getDate());
         return timestamp / 1;
     },
 
-    days_ago: function(days){
+    days: function()
+    {
+        return $('#days').val();
+    },
+
+    days_ago: function(days)
+    {
         var date = new Date();
         date.setDate(date.getDate() - days);
         return date;
@@ -70,7 +77,7 @@ var API = {
 
         var days = {};
 
-        for (var i = 0; i < API.days; i++) {
+        for (var i = 0; i < API.days(); i++) {
             days[API.midnight(API.days_ago(i))] = {};
         }
 
@@ -128,7 +135,8 @@ var API = {
         );
     },
     
-    aggregate: function(blog, posts){
+    aggregate: function(blog, posts)
+    {
         API.log('Processing posts for ' + blog);
 
         if (typeof API.counts[blog] == 'undefined') {
@@ -193,7 +201,11 @@ var API = {
     }
 };
 
-API.date_cutoff = API.days_ago(API.days) / 1;
+API.date_cutoff = API.days_ago(API.days()) / 1;
+
+$('#days').on('change', function(){
+    API.date_cutoff = API.days_ago(API.days()) / 1;
+});
 
 $('#submit').on('click', function(){
     API.loading();

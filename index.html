@@ -9,13 +9,26 @@
             line-height: 25px;
             resize: vertical;
         }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        #days {
+            vertical-align: 1px;
+            font-size: 16px;
+            width: 22px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="page-header">
               <h1>Blog Activity Aggregator</h1>
-              <p class="lead">Compare original posts over the last 10 days</p>
+              <p class="lead">Compare original posts over the last <input type="number" id="days" value="10" min="1" max="99"> days</p>
         </div>
 
         <div class="row">
