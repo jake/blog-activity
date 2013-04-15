@@ -98,10 +98,20 @@ var API = {
             }
         });
 
+        $('#results-head').append(
+            $('<th/>').attr('width', 140).text('Total')
+        );
+
+
         var days_ago = 0;
 
         for (day in days) {
             var row = $('<tr/>');
+
+            var total = {
+                notes: 0,
+                posts: 0,
+            }
 
             row.append($('<td/>').text(
                 API.days_ago(days_ago++).toDateString()
@@ -111,12 +121,23 @@ var API = {
                 var html = '<span class="muted">&mdash;</span>';
                 var info = days[day][blog];
 
+                total.notes += info.notes;
+                total.posts += info.posts;
+
                 if (info.posts) {
                     html = number_with_commas(info.notes) + ' <em class="muted">(' + info.posts + ' post' + (info.posts != 1 ? 's' : '') + ')</em>';
                 }
 
                 row.append($('<td/>').html(html));
             }
+
+            html = '<span class="muted">&mdash;</span>';
+
+            if (total.posts) {
+                html = number_with_commas(total.notes) + ' <em class="muted">(' + total.posts + ' post' + (total.posts != 1 ? 's' : '') + ')</em>'
+            }
+
+            row.append($('<td/>').html(html));
 
             $('#results-body').append(row);
         }
