@@ -69,14 +69,25 @@ var API = {
         $('#loading').hide();
     },
 
+    toggle_blog_columns: function()
+    {
+        if ($('.blog_column:hidden').length) {
+            API.show_blog_columns();
+        } else {
+            API.hide_blog_columns();
+        }
+    },
+
     hide_blog_columns: function()
     {
         $('.blog_column').hide();
+        $('#toggle_blog_columns').text('Show blogs');
     },
 
     show_blog_columns: function()
     {
         $('.blog_column').show();
+        $('#toggle_blog_columns').text('Hide blogs');
     },
 
     display_results: function()
@@ -112,7 +123,7 @@ var API = {
         });
 
         $('#results-head').append(
-            $('<th/>').attr('width', 140).text('Total')
+            $('<th/>').attr('width', 140).html('Total (<a href="#" id="toggle_blog_columns" onclick="API.toggle_blog_columns(); return false;">Hide blogs</a>)')
         );
 
 
