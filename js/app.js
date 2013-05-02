@@ -69,6 +69,16 @@ var API = {
         $('#loading').hide();
     },
 
+    hide_blog_columns: function()
+    {
+        $('.blog_column').hide();
+    },
+
+    show_blog_columns: function()
+    {
+        $('.blog_column').show();
+    },
+
     display_results: function()
     {
         API.log('Displaying results');
@@ -145,6 +155,10 @@ var API = {
             row.append($('<td/>').html(html));
 
             $('#results-body').append(row);
+        }
+
+        if (API.blogs.length > 4) {
+            API.hide_blog_columns();
         }
     },
 
@@ -235,6 +249,8 @@ $('#days').on('change', function(){
 
 $('#submit').on('click', function(){
     API.loading();
+
+    API.show_blog_columns();
 
     // Reset data
     API.blogs = [];
