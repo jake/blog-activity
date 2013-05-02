@@ -83,7 +83,10 @@ var API = {
 
         $(Object.keys(API.counts)).each(function(i, blog){
             $('#results-head').append(
-                $('<th/>').attr('width', 140).text(blog)
+                $('<th/>').attr({
+                    'width': 140,
+                    'class': 'blog_column',
+                }).text(blog)
             );
 
             for (day in days) {
@@ -128,7 +131,9 @@ var API = {
                     html = number_with_commas(info.notes) + ' <em class="muted">(' + info.posts + ' post' + (info.posts != 1 ? 's' : '') + ')</em>';
                 }
 
-                row.append($('<td/>').html(html));
+                row.append($('<td/>').attr({
+                    'class': 'blog_column',
+                }).html(html));
             }
 
             html = '<span class="muted">&mdash;</span>';
