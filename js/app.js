@@ -83,7 +83,7 @@ var API = {
 
         $(Object.keys(API.counts)).each(function(i, blog){
             $('#results-head').append(
-                $('<th/>').text(blog)
+                $('<th/>').attr('width', 140).text(blog)
             );
 
             for (day in days) {
