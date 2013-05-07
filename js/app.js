@@ -255,9 +255,9 @@ var API = {
             API.aggregate(data.response.blog.name, data.response.posts);
         } else {
             if (data.meta.status == 404) {
-                API.blogs--;
-                console.log(data);
                 API.log('Skipping invalid blog');
+                API.blogs--;
+                API.try_done();
             } else {
                 API.failure(data.meta.msg);
             }
