@@ -242,13 +242,6 @@ var API = {
         }
     },
 
-    validate_blog: function(blog)
-    {
-        $.get(API.base + '/blog/avatar/' + blog, function(){
-
-        });
-    },
-
     callback: function(data)
     {
         if (data && data.meta && data.meta.status == 200) {
