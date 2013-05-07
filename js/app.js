@@ -276,7 +276,8 @@ $('#submit').on('click', function(){
     $($('#blogs').val().split("\n")).each(function(i, val){
         val = val.trim();
         val = val.replace('http://', '');
-        val = val.replace(/\/$/, '');
+        val = val.replace('https://', '');
+        val = val.replace(/(\/|\?)(.*)/g, '')
 
         if (! val) return;
 
