@@ -289,6 +289,8 @@ $('#submit').on('click', function(){
     API.blogs_count = 0;
     API.counts = {};
 
+    var dupes = {};
+
     $($('#blogs').val().split("\n")).each(function(i, val){
         val = val.trim();
         val = val.replace('http://', '');
@@ -299,6 +301,13 @@ $('#submit').on('click', function(){
 
         if (val.indexOf('.') === -1) {
             val = val + '.tumblr.com';
+        }
+
+        if (! dupes[val]) {
+            dupes[val] = true;
+        } else {
+            API.log('Skipping dupe ' + val);
+            return;
         }
 
         API.blogs_count++;
