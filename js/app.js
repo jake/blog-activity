@@ -13,7 +13,7 @@ var API = {
 
     date_cutoff: 0,
 
-    blogs: [],
+    blogs: 0,
     counts: {},
     
     log: function(msg)
@@ -59,7 +59,7 @@ var API = {
 
     try_done: function()
     {
-        if (Object.keys(API.counts).length < API.blogs.length) return;
+        if (Object.keys(API.counts).length < API.blogs) return;
 
         API.display_results();
 
@@ -168,7 +168,7 @@ var API = {
             $('#results-body').append(row);
         }
 
-        if (API.blogs.length > 4) {
+        if (API.blogs > 4) {
             API.hide_blog_columns();
         }
     },
@@ -242,12 +242,25 @@ var API = {
         }
     },
 
+    validate_blog: function(blog)
+    {
+        $.get(API.base + '/blog/avatar/' + blog, function(){
+
+        });
+    },
+
     callback: function(data)
     {
         if (data && data.meta && data.meta.status == 200) {
             API.aggregate(data.response.blog.name, data.response.posts);
         } else {
-            API.failure(data.meta.msg);
+            if (data.meta.status == 404) {
+                API.blogs--;
+                console.log(data);
+                API.log('Skipping invalid blog');
+            } else {
+                API.failure(data.meta.msg);
+            }
         }
     }
 };
@@ -264,7 +277,7 @@ $('#submit').on('click', function(){
     API.show_blog_columns();
 
     // Reset data
-    API.blogs = [];
+    API.blogs = 0;
     API.counts = {};
 
     $($('#blogs').val().split("\n")).each(function(i, val){
@@ -278,9 +291,9 @@ $('#submit').on('click', function(){
             val = val + '.tumblr.com';
         }
 
-        API.blogs.push(val);
+        API.blogs++;
         API.load(val);
     });
 
-    if (! API.blogs.length) API.try_done();
+    if (! API.blogs) API.try_done();
 });
