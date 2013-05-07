@@ -20,7 +20,7 @@ var API = {
     
     log: function(msg)
     {
-        $('#log').append(msg + "\n");
+        $('#log').prepend(msg + "\n");
         return msg;
     },
 
