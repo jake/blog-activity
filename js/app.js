@@ -15,6 +15,8 @@ var API = {
 
     blogs: 0,
     counts: {},
+
+    show_results_timeout: false,
     
     log: function(msg)
     {
@@ -49,6 +51,13 @@ var API = {
     loading: function()
     {
         $('#submit').attr('disabled', 'disabled');
+
+        $('#show_results').hide();
+        window.clearTimeout(API.show_results);
+        API.show_results = window.setTimeout(function(){
+            $('#show_results').show();
+        }, 10000);
+
         $('#results').hide();
 
         $('#log').text('');
@@ -57,9 +66,11 @@ var API = {
         $('#loading').show();
     },
 
-    try_done: function()
+    try_done: function(force)
     {
-        if (Object.keys(API.counts).length < API.blogs) return;
+        if (! force && Object.keys(API.counts).length < API.blogs) return;
+
+        window.clearTimeout(API.show_results);
 
         API.display_results();
 
@@ -262,6 +273,11 @@ API.date_cutoff = API.days_ago(API.days()) / 1;
 
 $('#days').on('change', function(){
     API.date_cutoff = API.days_ago(API.days()) / 1;
+});
+
+$('#show_results_button').on('click', function(){
+    $('#show_results').hide();
+    API.try_done(true);
 });
 
 $('#submit').on('click', function(){
