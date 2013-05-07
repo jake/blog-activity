@@ -13,7 +13,7 @@ var API = {
 
     date_cutoff: 0,
 
-    blogs: 0,
+    blogs_count: 0,
     counts: {},
 
     show_results_timeout: false,
@@ -68,7 +68,7 @@ var API = {
 
     try_done: function(force)
     {
-        if (! force && Object.keys(API.counts).length < API.blogs) return;
+        if (! force && Object.keys(API.counts).length < API.blogs_count) return;
 
         window.clearTimeout(API.show_results);
 
@@ -179,7 +179,7 @@ var API = {
             $('#results-body').append(row);
         }
 
-        if (API.blogs > 4) {
+        if (API.blogs_count > 4) {
             API.hide_blog_columns();
         }
     },
@@ -260,7 +260,7 @@ var API = {
         } else {
             if (data.meta.status == 404) {
                 API.log('Skipping invalid blog');
-                API.blogs--;
+                API.blogs_count--;
                 API.try_done();
             } else {
                 API.failure(data.meta.msg);
@@ -286,7 +286,7 @@ $('#submit').on('click', function(){
     API.show_blog_columns();
 
     // Reset data
-    API.blogs = 0;
+    API.blogs_count = 0;
     API.counts = {};
 
     $($('#blogs').val().split("\n")).each(function(i, val){
@@ -301,9 +301,9 @@ $('#submit').on('click', function(){
             val = val + '.tumblr.com';
         }
 
-        API.blogs++;
+        API.blogs_count++;
         API.load(val);
     });
 
-    if (! API.blogs) API.try_done();
+    if (! API.blogs_count) API.try_done();
 });
