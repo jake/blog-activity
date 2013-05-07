@@ -52,12 +52,8 @@ var API = {
     {
         $('#submit').attr('disabled', 'disabled');
 
-        $('#show_results').hide();
-        window.clearTimeout(API.show_results_timeout);
-        API.show_results_timeout = window.setTimeout(function(){
-            $('#show_results').show();
-        }, 10000);
-
+        API.clear_show_results_timeout();
+        
         $('#results').hide();
 
         $('#log').text('');
@@ -70,15 +66,27 @@ var API = {
     {
         if (! force && Object.keys(API.counts).length < API.blogs_count) return;
 
-        window.clearTimeout(API.show_results_timeout);
-        $('#show_results').hide();
-
+        API.clear_show_results_timeout();
         API.display_results();
 
         $('#submit').removeAttr('disabled');
         $('#results').show();
 
         $('#loading').hide();
+    },
+
+    clear_show_results_timeout: function()
+    {
+        window.clearTimeout(API.show_results_timeout);
+        $('#show_results').hide();
+    },
+
+    extend_show_results_timeout: function()
+    {
+        window.clearTimeout(API.show_results_timeout);
+        API.show_results_timeout = window.setTimeout(function(){
+            $('#show_results').show();
+        }, 10000);
     },
 
     toggle_blog_columns: function()
@@ -107,7 +115,8 @@ var API = {
         API.log('Displaying results');
 
         $('#results').html($('#results-template').html());
-        $('#show_results').hide();
+
+        API.clear_show_results_timeout();
 
         var days = {};
 
@@ -193,6 +202,8 @@ var API = {
         }
 
         API.log('Querying ' + blog + ' at offset ' + offset);
+
+        API.extend_show_results_timeout();
 
         $.getScript(
             API.base + '/blog/' + blog + '/posts?jsonp=API.callback&reblog_info=true&limit=50&offset=' + offset + '&api_key=' + API.key
